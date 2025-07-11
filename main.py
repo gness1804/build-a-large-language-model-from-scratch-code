@@ -17,38 +17,35 @@ with open("the-verdict.txt", "r", encoding="utf-8") as f:
 preprocessed = re.split(r'([,.:;?_!"()\']|--|\s)', raw_text)
 preprocessed = [item.strip() for item in preprocessed if item.strip()]
 
-all_tokens = sorted(set(preprocessed))
-vocab_size = len(all_tokens)
+all_tokens: list[str] = sorted(list(set(preprocessed)))
+all_tokens.extend(["<|endoftext|>", "<|unk|>"])
+vocab_size: int = len(all_tokens)
 
-base_vocab = {token: index for index, token in enumerate(all_tokens)} # The Python dictionary that maps each word to its corresponding index
-# index_to_token = {index: token for index, token in enumerate(all_tokens)} # The Python dictionary that maps each index to its corresponding word
-
-# print(token_to_index["the"])
-# print(index_to_token[1])
+base_vocab: dict[str, int] = {token: index for index, token in enumerate(all_tokens)} # The Python dictionary that maps each word to its corresponding index
 
 class SimpleTokenizerV1:
-    def __init__(self, base_vocab):
+    def __init__(self, base_vocab: dict[str, int]):
         self.str_to_int = base_vocab
         self.int_to_str = {i:s for s,i in base_vocab.items()}
     
-    def encode(self, text):
+    def encode(self, text: str) -> list[int]:
         preprocessed = re.split(r'([,.:;?_!"()\']|--|\s)', text)
                                 
         preprocessed = [
             item.strip() for item in preprocessed if item.strip()
         ]
-        ids = [self.str_to_int[s] for s in preprocessed]
+        ids: list[int] = [self.str_to_int[s] for s in preprocessed]
         return ids
         
-    def decode(self, ids):
-        text = " ".join([self.int_to_str[i] for i in ids])
+    def decode(self, ids: list[int]) -> str:
+        text: str = " ".join([self.int_to_str[i] for i in ids])
         # Replace spaces before the specified punctuations
         text = re.sub(r'\s+([,.?!"()\'])', r'\1', text)
         return text
     
-tokenizer = SimpleTokenizerV1(base_vocab)
+tokenizer: SimpleTokenizerV1 = SimpleTokenizerV1(base_vocab)
 
-text = """"It's the last he painted, you know," 
-           Mrs. Gisburn said with pardonable pride."""
-ids = tokenizer.encode(text)
-print(ids)
+# text = "Ken Garner is a very good man."
+# ids = tokenizer.encode(text)
+# print(ids)
+# print(tokenizer.decode(ids))
