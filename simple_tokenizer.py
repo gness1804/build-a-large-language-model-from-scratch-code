@@ -1,5 +1,4 @@
 import re
-# import tiktoken
 from file_utils import download_and_read_text_file
 
 raw_text = download_and_read_text_file(
