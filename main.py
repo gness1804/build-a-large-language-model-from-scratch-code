@@ -1,5 +1,6 @@
 import os
 import urllib.request
+import re
 
 if not os.path.exists("the-verdict.txt"):
     url = ("https://raw.githubusercontent.com/rasbt/"
@@ -15,3 +16,9 @@ with open("the-verdict.txt", "r", encoding="utf-8") as f:
     
 print("Total number of character:", len(raw_text))
 print(raw_text[:99])
+
+text = "Hello, world. Is this-- a test?"
+result = re.split(r'([,.:;?_!"()\']|--|\s)', text)
+result = [item for item in result if item.strip()]
+
+print(result)
