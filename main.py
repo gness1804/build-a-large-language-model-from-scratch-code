@@ -1,8 +1,13 @@
 import re
-import tiktoken
+# import tiktoken
 from file_utils import download_and_read_text_file
 
-raw_text = download_and_read_text_file()
+raw_text = download_and_read_text_file(
+    file_path="the-verdict.txt",
+    url=("https://raw.githubusercontent.com/rasbt/"
+         "LLMs-from-scratch/main/ch02/01_main-chapter-code/"
+         "the-verdict.txt")
+)
     
 preprocessed = re.split(r'([,.:;?_!"()\']|--|\s)', raw_text)
 preprocessed = [item.strip() for item in preprocessed if item.strip()]
@@ -47,16 +52,4 @@ text = (
      "of someunknownPlace."
 )
 
-tokenizer2 = tiktoken.get_encoding("gpt2")
-
-integers = tokenizer2.encode(text, allowed_special={"<|endoftext|>"})
-
-# print(integers)
-
-strings = tokenizer2.decode(integers)
-
-print(strings)
-
-# text = " <|endoftext|> ".join((text1, text2))
-
-# print(tokenizer.decode(tokenizer.encode(text)))
+print(tokenizer.encode(text))
