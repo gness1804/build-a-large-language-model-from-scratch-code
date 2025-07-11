@@ -1,6 +1,7 @@
 import os
 import urllib.request
 import re
+import tiktoken
 
 if not os.path.exists("the-verdict.txt"):
     url = ("https://raw.githubusercontent.com/rasbt/"
@@ -52,6 +53,21 @@ tokenizer: SimpleTokenizerV2 = SimpleTokenizerV2(base_vocab)
 text1 = "Hello, do you like tea?"
 text2 = "In the sunlit terraces of the palace."
 
-text = " <|endoftext|> ".join((text1, text2))
+text = (
+    "Hello, do you like tea? <|endoftext|> In the sunlit terraces"
+     "of someunknownPlace."
+)
 
-print(tokenizer.decode(tokenizer.encode(text)))
+tokenizer2 = tiktoken.get_encoding("gpt2")
+
+integers = tokenizer2.encode(text, allowed_special={"<|endoftext|>"})
+
+# print(integers)
+
+strings = tokenizer2.decode(integers)
+
+print(strings)
+
+# text = " <|endoftext|> ".join((text1, text2))
+
+# print(tokenizer.decode(tokenizer.encode(text)))
