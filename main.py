@@ -14,11 +14,14 @@ if not os.path.exists("the-verdict.txt"):
 with open("the-verdict.txt", "r", encoding="utf-8") as f:
     raw_text = f.read()
     
-print("Total number of character:", len(raw_text))
-print(raw_text[:99])
+preprocessed = re.split(r'([,.:;?_!"()\']|--|\s)', raw_text)
+preprocessed = [item.strip() for item in preprocessed if item.strip()]
 
-text = "Hello, world. Is this-- a test?"
-result = re.split(r'([,.:;?_!"()\']|--|\s)', text)
-result = [item for item in result if item.strip()]
+all_tokens = sorted(set(preprocessed))
+vocab_size = len(all_tokens)
 
-print(result)
+token_to_index = {token: index for index, token in enumerate(all_tokens)} # The Python dictionary that maps each word to its corresponding index
+index_to_token = {index: token for index, token in enumerate(all_tokens)} # The Python dictionary that maps each index to its corresponding word
+
+print(token_to_index["the"])
+print(index_to_token[1])
