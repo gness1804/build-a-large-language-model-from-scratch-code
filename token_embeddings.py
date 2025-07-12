@@ -12,3 +12,5 @@ embedding_layer = torch.nn.Embedding(vocab_size, output_dim)
 # print(embedding_layer.weight)
 
 print(embedding_layer(input_ids))
+
+# Each token corresponds to a row in the embedding matrix
