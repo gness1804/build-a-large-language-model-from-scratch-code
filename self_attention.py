@@ -29,5 +29,28 @@ for idx, element in enumerate(inputs[0]):
 
 attn_weights_2_tmp = attn_scores_2 / attn_scores_2.sum()
 
-print("Attention weights:", attn_weights_2_tmp)
-print("Sum:", attn_weights_2_tmp.sum())
+# print("Attention weights:", attn_weights_2_tmp)
+# print("Sum:", attn_weights_2_tmp.sum())
+
+def softmax_naive(x):
+    return torch.exp(x) / torch.exp(x).sum(dim=0)
+
+attn_weights_2_naive = softmax_naive(attn_scores_2)
+
+# print("Attention weights:", attn_weights_2_naive)
+# print("Sum:", attn_weights_2_naive.sum())
+
+attn_weights_2 = torch.softmax(attn_scores_2, dim=0)
+
+# print("Attention weights:", attn_weights_2)
+# print("Sum:", attn_weights_2.sum())
+
+query = inputs[1] # 2nd input token is the query
+
+context_vec_2 = torch.zeros(query.shape)
+for i,x_i in enumerate(inputs):
+    context_vec_2 += attn_weights_2[i]*x_i
+
+print(context_vec_2)
+
+# Context = 0.4 × "ate" + 0.3 × "oranges" + 0.2 × "three" + 0.05 × "I" + 0.02 × "car" + ...
