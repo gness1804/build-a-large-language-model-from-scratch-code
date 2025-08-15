@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import tiktoken
 
 GPT_CONFIG_124M = {
     "n_vocab": 50257,
@@ -11,6 +12,7 @@ GPT_CONFIG_124M = {
     "qkv_bias": True,
 }
 
+tokenizer = tiktoken.get_encoding("gpt2")
 
 class DummyGPTModel(nn.Module):
     def __init__(self, cfg):
@@ -59,6 +61,21 @@ class DummyLayerNorm(nn.Module):
     def forward(self, x):
         # This layer does nothing and just returns its input.
         return x
+
+
+batch = []
+txt1 = "Every effort moves you"
+txt2 = "Every day holds a"
+
+for txt in [txt1, txt2]:
+    batch.append(torch.tensor(tokenizer.encode(txt)))
+
+batch = torch.stack(batch, dim=0)
+print(batch)
+
+
+
+
 
 
 
